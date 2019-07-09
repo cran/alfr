@@ -10,36 +10,7 @@ require(magrittr)
 #' @param node_id node id, defaults to \code{-root-}
 #' @param relative_path relative path from \code{node_id} to required node, defaults to \code{NULL}
 #' @return Node details
-#' @examples
-#' \donttest{
-#' # establish a connection to the alfresco content repository
-#' my_session <- alf_session("alfresco.my-org.com", "admin", "admin")
-#'
-#' # get details of document node
-#' my_document <- alf_node(my_session, relative_path = "testFolder/testdoc.txt")
-#'
-#' # output the name of the document
-#' print(my_document$name)
-#' #[1] "testdoc.txt"
-#'
-#' # output the details of documents content
-#' print(my_document$content$mime_type)
-#' #[1] "text/plain"
-#' print(my_document$content$mime_type_name)
-#' #[1] "Plain Text"
-#' print(my_document$content$size)
-#' #[1] 19
-#' print(my_document$content$encoding)
-#' #[1] "ISO-8859-1"
-#'
-#' # read document content
-#' my_content_file <- file(my_document$content$as.file(), "r")
-#' my_content <- readLines(my_content_file)
-#' close(my_content_file)
-#'
-#' # upload new content
-#' my_document <- my_document$content$update("resources/testuploaddoc.txt")
-#' }
+#' @example R/examples/example_alf_node.R
 #' @export
 ##
 alf_node <- function (session, node_id = "-root-", relative_path = NULL) {
@@ -65,6 +36,7 @@ alf_node <- function (session, node_id = "-root-", relative_path = NULL) {
 #' @param node_id node id
 #' @param node_details details of new node
 #' @return node details
+#' @example R/examples/example_alf_node.R
 #' @export
 ##
 alf_node.new <- function(session, node_id, node_details) {
@@ -74,8 +46,29 @@ alf_node.new <- function(session, node_id, node_details) {
   # POST node update
   alf_POST(session$node_children_endpoint(node_id), session$ticket, body = toJSON(node_details, auto_unbox = TRUE)) %>%
     as.node(session)
-
 }
+
+##
+#' @title Deletes an Alfresco node
+#' @description
+#' Deletes an Alfresco node identified by \code{node_id}. If the node is a folder then all the
+#' delete recurses through the primary children.
+#' @param session valid Alfresco repository session
+#' @param node_id node id to delete
+#' @param permanent indicates whether the node is permanently deleted or places in the trashcan where
+#' where it can be recovered from.  \code{FALSE} by default.
+#' @example R/examples/example_alf_node.R
+#' @export
+##
+alf_node.delete <- function(session, node_id, permanent = FALSE) {
+
+  # TODO deal with invaild session
+
+  # DELETE node
+  alf_DELETE(session$node_endpoint(node_id), session$ticket, params=list(permanent=permanent))
+}
+
+## TODO alf_node.exists
 
 ##
 # Helper to represent response as node information

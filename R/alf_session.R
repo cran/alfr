@@ -1,11 +1,13 @@
 require(httr)
 require(magrittr)
+require(stringr)
 
 # base endpoint helper
 base_endpoint <- function(server, endpoint) paste(server, "/alfresco/api/-default-/public/", endpoint, sep="")
 
 # tickets endpoint function
 tickets_endpoint <- function(server) base_endpoint(server, "authentication/versions/1/tickets")
+ticket_endpoint <- function(server) paste(tickets_endpoint(server), "-me-", sep="/")
 
 ##
 #' @title
@@ -17,19 +19,7 @@ tickets_endpoint <- function(server) base_endpoint(server, "authentication/versi
 #' @param username user name
 #' @param password password
 #' @return Connection session to Alfresco repository
-#' @examples
-#' \donttest{
-#' # establish a connection to the alfresco content repository
-#' my_session <- alf_session("alfresco.my-org.com", "admin", "admin")
-#'
-#' # output the server URL
-#' print(my_session$server)
-#' #[1] "alfresco.my-org.com"
-#'
-#' # output the connection ticket
-#' print(my_session$ticket)
-#' #[1] "xxx-xxx-xxx-xxx"
-#' }
+#' @example R/examples/example_alf_session.R
 #' @export
 ##
 alf_session <- function (server, username, password) {
@@ -67,12 +57,51 @@ alf_session <- function (server, username, password) {
   }
 }
 
-# TODO
-# alf_session.is_valid <- function (session) {
-#
-# }
+##
+#' @title
+#' Determine whether a session is valid.
+#' @description
+#' Determines whether a given session is still valid or not.
+#' @param session session
+#' @return \code{TRUE} if the session is valid, \code{FALSE} otherwise
+#' @example R/examples/example_alf_session.R
+#' @export
+##
+alf_session.is_valid <- function (session) {
 
-#TODO
-# alf_session.invalidate <- function (session) {
-#
-# }
+  tryCatch(
+
+    # TRUE if session is valid
+    if (!is.null(alf_GET(ticket_endpoint(session$server), ticket=session$ticket, params=list(ticket=session$ticket)))) TRUE,
+
+    # FALSE if session is invalid, otherwise rethrow error
+    error = function(e) if (str_detect(string=e$message, pattern = "401")) FALSE else stop(e)
+  )
+}
+
+##
+#' @title
+#' Invalidates a session.
+#' @description
+#' Invalidates a valid session so it can no longer be used to connect to an Alfresco repository.
+#' @param session session
+#' @return \code{TRUE} if session has been successfully invalidated, \code{FALSE} if session was
+#' already invalid.
+#' @example R/examples/example_alf_session.R
+#' @export
+##
+alf_session.invalidate <- function (session) {
+
+  tryCatch ({
+
+      # attempt to invalidate the ticket
+      alf_DELETE(ticket_endpoint(session$server), ticket=session$ticket, params=list(ticket=session$ticket))
+      TRUE
+    },
+
+    # ignore 401, but rethrow everything else in case it's a genuine error
+    error = function (e) if (str_detect(string=e$message, pattern = "401")) FALSE else stop(e)
+  ) %>%
+
+  invisible()
+}
