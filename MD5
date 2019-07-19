@@ -1,14 +1,13 @@
-24f19dbd07a0586b3610941aed5e996a *DESCRIPTION
+e3a832180e84868b589f761e9fa7ffe6 *DESCRIPTION
 e62637ea8a114355b985fd86c9ffbd6e *LICENSE
 75aae5ec0342cf66683b962c16b6ef68 *NAMESPACE
-01b78c0a1306e2362bed4f2e4dc9f142 *NEWS.md
+57d6c1ccb612dee0fe272c67190fe0a5 *NEWS.md
 af97957468744b7f7b9d0e50f2aa9676 *R/alf_http.R
 f91481858cfd18fd7e18810491e9119e *R/alf_node.R
 191834e58135b917bb8e31b8696d1780 *R/alf_session.R
 bd687604d971675169b0533385cfcd05 *R/alfr.R
 f3837e7aaa56e3f75b9be12a5ce26463 *R/examples/example_alf_node.R
 9a2e95e5bf4c607c5838862f06b2a6d5 *R/examples/example_alf_session.R
-46e8c93d8ac0359ec7141713cb789841 *R/sysdata.rda
 5ce081031829f750f9c8612c4a61ecda *README.md
 fe903a9bc56a722c2d8a67a9be63e4a8 *build/vignette.rds
 9f97f45ded54c90b98494d108c3d64e0 *inst/WORDLIST
@@ -46,8 +45,6 @@ c1a734f3fadbb24da1720aa1e1cf2513 *tests/api/authentication/versions/1/tickets/-m
 332173f20d20942c02019350ea4dcadc *tests/spelling.R
 68c2738c0378cc8bca7d79c56bec7a9e *tests/testthat.R
 79a27ffbddc680d109a1c92d38a35922 *tests/testthat/helper.R
-e11273cfc2fbcc11b4c889b783ff103a *tests/testthat/resources/testdoc.txt
-5e5fe951040c5fd8c54d3e686c32ce13 *tests/testthat/resources/testuploaddoc.txt
 361ad21091e3c4455d129b2ed4d7bd69 *tests/testthat/testalf_node.R
-954599a93ad2d01d86d481c1cb0299f4 *tests/testthat/testalf_session.R
+b2fd1b8dca7ddb18633cb7e7313a0d65 *tests/testthat/testalf_session.R
 fabd86e09d737f35ec7b79941036766f *vignettes/working_with_content.Rmd

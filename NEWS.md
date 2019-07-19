@@ -1,3 +1,7 @@
+## alfr 1.2.1
+
+* Remove unnecessary sysdata.rda to remove warnings reported by CRAN [here](https://CRAN.R-project.org/web/checks/check_results_alfr.html)
+
 ## alfr 1.2.0
 
 * Added folder and document delete
